@@ -10,8 +10,9 @@ import (
 )
 
 const (
-	maxUsersLimit     = 200
-	maxUsersHardLimit = 250
+	// custom: user limits disabled (were 200/250)
+	maxUsersLimit     = 0
+	maxUsersHardLimit = 0
 )
 
 // GetServerLimits returns the server's seat/post-history limits. The license-derived
@@ -44,15 +45,8 @@ func (a *App) GetServerLimits(includeUserCounts bool) (*model.ServerLimits, *mod
 	}
 
 	// Check if license has post history limits and get the calculated timestamp
-	if license != nil && license.Limits != nil && license.Limits.PostHistory > 0 {
-		limits.PostHistoryLimit = license.Limits.PostHistory
-		// Get the calculated timestamp of the last accessible post
-		lastAccessibleTime, appErr := a.GetLastAccessiblePostTime()
-		if appErr != nil {
-			return nil, appErr
-		}
-		limits.LastAccessiblePostTime = lastAccessibleTime
-	}
+	// custom: post history limits disabled unconditionally; never report a limit
+	// (see GetPostHistoryLimit / GetLastAccessiblePostTime)
 
 	// The user/guest count queries are expensive (the single-channel guest count is a
 	// full ChannelMembers scan). Only run them when the caller actually needs the counts.
@@ -102,13 +96,8 @@ func (a *App) shouldTrackSingleChannelGuests() bool {
 }
 
 func (a *App) GetPostHistoryLimit() int64 {
-	license := a.License()
-	if license == nil || license.Limits == nil || license.Limits.PostHistory == 0 {
-		// No limits applicable
-		return 0
-	}
-
-	return license.Limits.PostHistory
+	// custom: post history limits disabled unconditionally
+	return 0
 }
 
 func (a *App) isAtUserLimit() (bool, *model.AppError) {
