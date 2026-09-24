@@ -17,7 +17,7 @@ import (
 const (
 	PageDefault        = 0
 	PerPageDefault     = 60
-	PerPageMaximum     = 200
+	PerPageMaximum     = 10000 // custom: raised from 200
 	LogsPerPageDefault = 10000
 	LogsPerPageMaximum = 10000
 	LimitDefault       = 60
