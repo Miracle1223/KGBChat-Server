@@ -142,7 +142,7 @@ const (
 	ServiceSettingsMaxUniqueReactionsPerPost     = 500
 
 	TeamSettingsDefaultSiteName              = "Mattermost"
-	TeamSettingsDefaultMaxUsersPerTeam       = 50
+	TeamSettingsDefaultMaxUsersPerTeam       = 1000000 // custom: raised from 50
 	TeamSettingsDefaultCustomBrandText       = ""
 	TeamSettingsDefaultCustomDescriptionText = ""
 	TeamSettingsDefaultUserStatusAwayTimeout = 300
@@ -1916,11 +1916,11 @@ func (s *FileSettings) SetDefaults(isUpdate bool) {
 	}
 
 	if s.MaxFileSize == nil {
-		s.MaxFileSize = new(int64(100 * 1024 * 1024)) // 100MB (IEC)
+		s.MaxFileSize = new(int64(10 * 1024 * 1024 * 1024)) // custom: 10GB, raised from 100MB
 	}
 
 	if s.MaxImageResolution == nil {
-		s.MaxImageResolution = new(int64(7680 * 4320)) // 8K, ~33MPX
+		s.MaxImageResolution = new(int64(1000 * 1000 * 1000)) // custom: ~1000MPX, raised from 8K/33MPX
 	}
 
 	if s.MaxImageDecoderConcurrency == nil {
@@ -2657,7 +2657,7 @@ func (s *TeamSettings) SetDefaults() {
 	}
 
 	if s.MaxChannelsPerTeam == nil {
-		s.MaxChannelsPerTeam = new(int64(2000))
+		s.MaxChannelsPerTeam = new(int64(1000000)) // custom: raised from 2000
 	}
 
 	if s.EnableChannelCategorySorting == nil {
@@ -2665,7 +2665,7 @@ func (s *TeamSettings) SetDefaults() {
 	}
 
 	if s.MaxNotificationsPerChannel == nil {
-		s.MaxNotificationsPerChannel = new(int64(1000))
+		s.MaxNotificationsPerChannel = new(int64(1000000)) // custom: raised from 1000
 	}
 
 	if s.EnableConfirmNotificationsToChannel == nil {
